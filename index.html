@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Feature Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        input, select, button {
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin: 5px 0;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .remove-btn {
+            background-color: #ff4444;
+            padding: 5px 10px;
+        }
+
+        form div {
+            margin: 10px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* New styles for sections */
+        #mainContent, #loginSection {
+            display: none;
+        }
+
+        .tab-buttons {
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons button {
+            margin-right: 10px;
+            padding: 10px 20px;
+        }
+
+        .tab-buttons button.active {
+            background-color: #2E8B57;
+        }
+
+        .feature-section {
+            display: none;
+        }
+
+        .feature-section.active {
+            display: block;
+        }
+
+        .task-input-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .task-input-group div {
+            margin-bottom: 10px;
+        }
+
+        .task-item {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .task-details {
+            flex-grow: 1;
+        }
+
+        .task-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn {
+            background-color: #ffa500;
+        }
+
+        .save-btn {
+            background-color: #4CAF50;
+        }
+
+        .remove-btn {
+            background-color: #ff4444;
+        }
+
+        .editable-field {
+            padding: 5px;
+            margin: 2px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+
+        .button-container {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #colorSelect {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        #colorButton {
+            min-width: 120px;
+            transition: background-color 0.3s ease;
+        }
+
+        #resetButton {
+            margin-top: 10px;
+            background-color: #666;
+        }
+
+        #resetButton:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- Registration Form Section -->
+    <section id="registration">
+        <h2>Registration Form</h2>
+        <form id="registrationForm">
+            <div>
+                <label for="regName">Name:</label>
+                <input type="text" id="regName" required>
+                <div id="nameError" class="error"></div>
+            </div>
+            <div>
+                <label for="regEmail">Email:</label>
+                <input type="email" id="regEmail" required>
+                <div id="regEmailError" class="error"></div>
+            </div>
+            <div>
+                <label for="regPassword">Password:</label>
+                <input type="password" id="regPassword" required>
+                <div id="regPasswordError" class="error"></div>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+    </section>
+
+    <!-- Login Form Section -->
+    <section id="loginSection">
+        <h2>Login Form</h2>
+        <form id="loginForm">
+            <div>
+                <label for="loginEmail">Email:</label>
+                <input type="email" id="loginEmail" required>
+                <div id="loginEmailError" class="error"></div>
+            </div>
+            <div>
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" required>
+                <div id="loginPasswordError" class="error"></div>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </section>
+
+    <!-- Main Content Section (Initially Hidden) -->
+    <section id="mainContent">
+        <div class="tab-buttons">
+            <button id="taskBtn" class="active">Task Manager</button>
+            <button id="dropdownBtn">Dropdowns</button>
+            <button id="colorBtn">Interactive Button</button>
+        </div>
+
+        <!-- Feature Sections -->
+        <div id="taskManager" class="feature-section active">
+            <h2>Task Manager</h2>
+            <div class="task-input-group">
+                <div>
+                    <label for="taskName">Name:</label>
+                    <input type="text" id="taskName" placeholder="Enter name">
+                </div>
+                <div>
+                    <label for="taskAge">Age:</label>
+                    <input type="number" id="taskAge" placeholder="Enter age">
+                </div>
+                <div>
+                    <label for="taskPhone">Phone:</label>
+                    <input type="tel" id="taskPhone" placeholder="Enter phone number">
+                </div>
+                <button id="addTask">Add Task</button>
+            </div>
+            <ul id="taskList" style="list-style: none;"></ul>
+        </div>
+
+        <div id="dropdowns" class="feature-section">
+            <h2>Dynamic Dropdowns</h2>
+            <select id="categorySelect">
+                <option value="">Select Category</option>
+                <option value="fruits">Fruits</option>
+                <option value="animals">Animals</option>
+                <option value="colors">Colors</option>
+            </select>
+            <select id="itemSelect">
+                <option value="">Select Item</option>
+            </select>
+            <p id="selectedItem"></p>
+        </div>
+
+        <div id="buttonEvents" class="feature-section">
+            <h2>Interactive Button</h2>
+            <div class="button-container">
+                <select id="colorSelect">
+                    <option value="">Select Color</option>
+                    <option value="#FF0000">Red</option>
+                    <option value="#00FF00">Green</option>
+                    <option value="#0000FF">Blue</option>
+                    <option value="#FFFF00">Yellow</option>
+                    <option value="#FF00FF">Magenta</option>
+                    <option value="#00FFFF">Cyan</option>
+                    <option value="#FFA500">Orange</option>
+                    <option value="#800080">Purple</option>
+                    <option value="#008000">Dark Green</option>
+                    <option value="#000080">Navy Blue</option>
+                </select>
+                <button id="colorButton" title="Click me!">Change Color</button>
+            </div>
+            <button id="resetButton">Reset Color</button>
+        </div>
+    </section>
+
+    <script>
+        // Task Management
+        document.getElementById('addTask').addEventListener('click', function() {
+            const nameInput = document.getElementById('taskName');
+            const ageInput = document.getElementById('taskAge');
+            const phoneInput = document.getElementById('taskPhone');
+            
+            if (nameInput.value.trim() !== '' && ageInput.value.trim() !== '' && phoneInput.value.trim() !== '') {
+                const taskList = document.getElementById('taskList');
+                const li = document.createElement('li');
+                li.className = 'task-item';
+                
+                // Create task content
+                const taskDetails = document.createElement('div');
+                taskDetails.className = 'task-details';
+                taskDetails.innerHTML = `
+                    <p><strong>Name:</strong> <span class="name-field">${nameInput.value}</span></p>
+                    <p><strong>Age:</strong> <span class="age-field">${ageInput.value}</span></p>
+                    <p><strong>Phone:</strong> <span class="phone-field">${phoneInput.value}</span></p>
+                `;
+                
+                // Create buttons container
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'task-buttons';
+                
+                // Edit button
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Edit';
+                editBtn.className = 'edit-btn';
+                
+                // Remove button
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'Remove';
+                removeBtn.className = 'remove-btn';
+                
+                // Add buttons to container
+                buttonContainer.appendChild(editBtn);
+                buttonContainer.appendChild(removeBtn);
+                
+                // Add everything to list item
+                li.appendChild(taskDetails);
+                li.appendChild(buttonContainer);
+                taskList.appendChild(li);
+                
+                // Clear inputs
+                nameInput.value = '';
+                ageInput.value = '';
+                phoneInput.value = '';
+                
+                // Edit functionality
+                editBtn.addEventListener('click', function() {
+                    const nameField = li.querySelector('.name-field');
+                    const ageField = li.querySelector('.age-field');
+                    const phoneField = li.querySelector('.phone-field');
+                    
+                    if (editBtn.textContent === 'Edit') {
+                        // Switch to edit mode
+                        nameField.innerHTML = `<input type="text" class="editable-field" value="${nameField.textContent}">`;
+                        ageField.innerHTML = `<input type="number" class="editable-field" value="${ageField.textContent}">`;
+                        phoneField.innerHTML = `<input type="tel" class="editable-field" value="${phoneField.textContent}">`;
+                        editBtn.textContent = 'Save';
+                        editBtn.className = 'save-btn';
+                    } else {
+                        // Save changes
+                        const newName = li.querySelector('.name-field input').value;
+                        const newAge = li.querySelector('.age-field input').value;
+                        const newPhone = li.querySelector('.phone-field input').value;
+                        
+                        nameField.textContent = newName;
+                        ageField.textContent = newAge;
+                        phoneField.textContent = newPhone;
+                        
+                        editBtn.textContent = 'Edit';
+                        editBtn.className = 'edit-btn';
+                    }
+                });
+                
+                // Remove functionality
+                removeBtn.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to remove this task?')) {
+                        li.remove();
+                    }
+                });
+            } else {
+                alert('Please fill in all fields');
+            }
+        });
+
+        // Modified Registration Form Handler
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            
+            let isValid = true;
+            
+            // Name validation
+            if (!/^[A-Za-z\s]+$/.test(name)) {
+                document.getElementById('nameError').textContent = 'Name should contain only letters';
+                isValid = false;
+            } else {
+                document.getElementById('nameError').textContent = '';
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('regEmailError').textContent = 'Please enter a valid email address';
+                isValid = false;
+            } else {
+                document.getElementById('regEmailError').textContent = '';
+            }
+            
+            // Password validation
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                document.getElementById('regPasswordError').textContent = 
+                    'Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character';
+                isValid = false;
+            } else {
+                document.getElementById('regPasswordError').textContent = '';
+            }
+            
+            if (isValid) {
+                // Store registration data
+                localStorage.setItem('registeredName', name);
+                localStorage.setItem('registeredEmail', email);
+                localStorage.setItem('registeredPassword', password);
+                
+                // Hide registration, show login
+                document.getElementById('registration').style.display = 'none';
+                document.getElementById('loginSection').style.display = 'block';
+                
+                // Clear registration form
+                document.getElementById('registrationForm').reset();
+                
+                // Pre-fill login email
+                document.getElementById('loginEmail').value = email;
+                
+                alert('Registration successful! Please login.');
+            }
+        });
+
+        // Modified Login Form Handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            let isValid = true;
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('loginEmailError').textContent = 'Please enter a valid email address';
+                isValid = false;
+            } else {
+                document.getElementById('loginEmailError').textContent = '';
+            }
+            
+            // Password validation
+            if (password.trim() === '') {
+                document.getElementById('loginPasswordError').textContent = 'Password is required';
+                isValid = false;
+            } else {
+                document.getElementById('loginPasswordError').textContent = '';
+            }
+            
+            if (isValid) {
+                // Check against stored credentials
+                const storedEmail = localStorage.getItem('registeredEmail');
+                const storedPassword = localStorage.getItem('registeredPassword');
+                
+                if (email === storedEmail && password === storedPassword) {
+                    // Successful login
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('registration').style.display = 'none';
+                    document.getElementById('mainContent').style.display = 'block';
+                    
+                    // Welcome message
+                    const userName = localStorage.getItem('registeredName');
+                    alert('Login successful! Welcome ' + userName);
+                    
+                    // Store login status
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('currentUser', userName);
+
+                    // Add logout button
+                    addLogoutButton();
+                } else {
+                    // Failed login
+                    if (email !== storedEmail) {
+                        document.getElementById('loginEmailError').textContent = 'Email not found';
+                    }
+                    if (password !== storedPassword) {
+                        document.getElementById('loginPasswordError').textContent = 'Incorrect password';
+                    }
+                    alert('Invalid email or password!');
+                }
+            }
+        });
+
+        // Check login status on page load
+        window.addEventListener('load', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const currentUser = localStorage.getItem('currentUser');
+            
+            if (isLoggedIn && currentUser) {
+                document.getElementById('registration').style.display = 'none';
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                addLogoutButton();
+            } else {
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'none';
+            }
+        });
+
+        // Modified Logout functionality
+        function addLogoutButton() {
+            const logoutButton = document.createElement('button');
+            logoutButton.textContent = 'Logout';
+            logoutButton.style.position = 'fixed';
+            logoutButton.style.top = '20px';
+            logoutButton.style.right = '20px';
+            
+            logoutButton.addEventListener('click', function() {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('currentUser');
+                document.getElementById('registration').style.display = 'block';
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'none';
+                this.remove();
+                window.location.reload();
+            });
+            
+            document.body.appendChild(logoutButton);
+        }
+
+        // Interactive Button
+        const colorButton = document.getElementById('colorButton');
+        const colorSelect = document.getElementById('colorSelect');
+        const resetButton = document.getElementById('resetButton');
+        const originalColor = '#4CAF50'; // Default button color
+
+        // Set initial button color
+        colorButton.style.backgroundColor = originalColor;
+
+        // Change color button click handler
+        colorButton.addEventListener('click', function() {
+            const selectedColor = colorSelect.value;
+            if (selectedColor) {
+                this.style.backgroundColor = selectedColor;
+            } else {
+                alert('Please select a color first!');
+            }
+        });
+
+        // Reset button click handler
+        resetButton.addEventListener('click', function() {
+            colorButton.style.backgroundColor = originalColor;
+            colorSelect.value = ''; // Reset dropdown selection
+        });
+
+        // Optional: Change color on dropdown change
+        colorSelect.addEventListener('change', function() {
+            if (this.value) {
+                colorButton.style.backgroundColor = this.value;
+            }
+        });
+
+        // Dynamic Dropdowns
+        const categoryItems = {
+            fruits: ['Apple', 'Banana', 'Orange', 'Mango'],
+            animals: ['Lion', 'Elephant', 'Tiger', 'Giraffe'],
+            colors: ['Red', 'Blue', 'Green', 'Yellow']
+        };
+
+        document.getElementById('categorySelect').addEventListener('change', function() {
+            const itemSelect = document.getElementById('itemSelect');
+            const selectedCategory = this.value;
+            
+            // Clear existing options
+            itemSelect.innerHTML = '<option value="">Select Item</option>';
+            
+            if (selectedCategory) {
+                categoryItems[selectedCategory].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.toLowerCase();
+                    option.textContent = item;
+                    itemSelect.appendChild(option);
+                });
+            }
+        });
+
+        document.getElementById('itemSelect').addEventListener('change', function() {
+            const selectedItem = this.options[this.selectedIndex].text;
+            document.getElementById('selectedItem').textContent = 
+                selectedItem !== 'Select Item' ? `Selected: ${selectedItem}` : '';
+        });
+
+        // Tab switching functionality
+        const tabButtons = document.querySelectorAll('.tab-buttons button');
+        const featureSections = document.querySelectorAll('.feature-section');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and sections
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                featureSections.forEach(section => section.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show corresponding section
+                let sectionId;
+                switch(button.id) {
+                    case 'taskBtn':
+                        sectionId = 'taskManager';
+                        break;
+                    case 'dropdownBtn':
+                        sectionId = 'dropdowns';
+                        break;
+                    case 'colorBtn':
+                        sectionId = 'buttonEvents';
+                        break;
+                }
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
